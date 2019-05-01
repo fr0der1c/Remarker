@@ -88,7 +88,7 @@ def create_note(auth_token, note_store, note_title, note_body, note_tags, parent
 
 
 def get_db():
-    return current_app.mongo.get_database(app.config['MONGODB_DB'])
+    return current_app.mongo.get_database(__app.config['MONGODB_DB'])
 
 
 def create_app() -> Flask:
