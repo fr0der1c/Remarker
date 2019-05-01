@@ -10,6 +10,8 @@ flask = "*"
 evernote3 = "*"
 pymongo = "*"
 lxml = "*"
+raven = "*"
+logbook = "*"
 
 [requires]
 python_version = "3.7"

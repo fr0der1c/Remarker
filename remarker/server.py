@@ -3,16 +3,44 @@ import html
 import json
 import uuid
 
+import logbook
 from evernote.api.client import EvernoteClient
 from evernote.edam.error.ttypes import EDAMNotFoundException, EDAMUserException
 from evernote.edam.type.ttypes import Note
 from flask import Flask, current_app, request, session, url_for
 from pymongo import MongoClient
+from raven.contrib.flask import Sentry
+from raven.handlers.logbook import SentryHandler
 
 from remarker.config import get_config
 
 COL_REQUEST_TOKENS = 'evernote_request_tokens'
 COL_ACCESS_TOKENS = 'evernote_access_tokens'
+
+logger = logbook.Logger(__name__)
+sentry = Sentry()
+__app = None
+
+try:
+    import uwsgidecorators
+
+    """
+    below are functions that will be executed in **each** process after fork().
+    these functions will be executed in the same order of definition here.
+    """
+
+
+    @uwsgidecorators.postfork
+    def init_log_handlers():
+        global __app, __first_spawn
+
+        # Sentry
+        if __app.config['CONFIG_NAME'] in __app.config['SENTRY_AVAILABLE_IN']:
+            sentry.init_app(app=__app)
+            sentry_handler = SentryHandler(sentry.client, level='WARNING')  # Sentry 只处理 WARNING 以上的
+            logger.handlers.append(sentry_handler)
+except:
+    pass
 
 
 def evernote_authorize_content():
@@ -169,6 +197,9 @@ def create_app() -> Flask:
             del session['client_id']
             return 'Delete success'
         return 'No need to delete'
+
+    global __app
+    __app = app
 
     return app
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3aa3435699ee426991a4bdcb393d4f2f743302c2e24cc060de9014133c0e6b23"
+            "sha256": "b3b1c434013e082274c9157d32c276a2362e331fd374bc9a7e9d7cfafaee6204"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -36,6 +36,14 @@
                 "sha256:5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"
             ],
             "version": "==7.0"
+        },
+        "contextlib2": {
+            "hashes": [
+                "sha256:509f9419ee91cdd00ba34443217d5ca51f5a364a404e1dce9e8979cea969ca48",
+                "sha256:f5260a6e679d2ff42ec91ec5252f4eeffdcf21053db9113bd0a8e4d953769c00"
+            ],
+            "markers": "python_version < '3.2'",
+            "version": "==0.5.5"
         },
         "evernote3": {
             "hashes": [
@@ -79,6 +87,13 @@
                 "sha256:14dd6caf1527abb21f08f86c784eac40853ba93edb79552aa1e4b8aef1b61c7b"
             ],
             "version": "==2.10.1"
+        },
+        "logbook": {
+            "hashes": [
+                "sha256:a5a96792abd8172c80d61b7530e134524f20e2841981038031e602ed5920fef5"
+            ],
+            "index": "pypi",
+            "version": "==1.4.3"
         },
         "lxml": {
             "hashes": [
@@ -192,6 +207,14 @@
             ],
             "index": "pypi",
             "version": "==3.8.0"
+        },
+        "raven": {
+            "hashes": [
+                "sha256:3fa6de6efa2493a7c827472e984ce9b020797d0da16f1db67197bcc23c8fae54",
+                "sha256:44a13f87670836e153951af9a3c80405d36b43097db869a36e92809673692ce4"
+            ],
+            "index": "pypi",
+            "version": "==6.10.0"
         },
         "requests": {
             "hashes": [

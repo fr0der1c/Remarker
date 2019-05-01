@@ -12,5 +12,12 @@ class Config:
     }
     MONGODB_DB = 'remarker'
 
+    SENTRY_CONFIG = {
+        'dsn'    : '',
+        'release': '',
+        'tags'   : {'environment': 'default'}
+    }
+
     PRODUCTION_SECURE_FIELDS = ['SECRET_KEY', 'EVERNOTE_CONSUMER_KEY', 'EVERNOTE_CONSUMER_SECRET']
 
+    SENTRY_AVAILABLE_IN = ['PRODUCTION']
