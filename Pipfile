@@ -12,6 +12,7 @@ pymongo = "*"
 lxml = "*"
 raven = "*"
 logbook = "*"
+blinker = "*"
 
 [requires]
 python_version = "3.7"

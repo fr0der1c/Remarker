@@ -24,15 +24,9 @@ __app = None
 try:
     import uwsgidecorators
 
-    """
-    below are functions that will be executed in **each** process after fork().
-    these functions will be executed in the same order of definition here.
-    """
-
-
     @uwsgidecorators.postfork
     def init_log_handlers():
-        global __app, __first_spawn
+        global __app
 
         # Sentry
         if __app.config['CONFIG_NAME'] in __app.config['SENTRY_AVAILABLE_IN']:
