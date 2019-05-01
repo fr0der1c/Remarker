@@ -1,0 +1,10 @@
+version: "3"
+services:
+  remarker:
+    image: remarker:${CURRENT_VERSION}
+    sysctls:
+    - net.core.somaxconn=4096
+    environment:
+      MODE: DEVELOPMENT
+    ports:
+      - 5001:80

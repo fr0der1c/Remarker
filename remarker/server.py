@@ -33,14 +33,19 @@ try:
             sentry.init_app(app=__app)
             sentry_handler = SentryHandler(sentry.client, level='WARNING')  # Sentry 只处理 WARNING 以上的
             logger.handlers.append(sentry_handler)
-except:
+
+
+    @uwsgidecorators.postfork
+    def init_db():
+        __app.mongo = MongoClient(**__app.config['MONGODB'])
+except ModuleNotFoundError:
     pass
 
 
 def evernote_authorize_content():
     client = EvernoteClient(
-            consumer_key=app.config['EVERNOTE_CONSUMER_KEY'],
-            consumer_secret=app.config['EVERNOTE_CONSUMER_SECRET'],
+            consumer_key=__app.config['EVERNOTE_CONSUMER_KEY'],
+            consumer_secret=__app.config['EVERNOTE_CONSUMER_SECRET'],
             sandbox=True
     )
     request_token = client.get_request_token(url_for('evernote_callback', _external=True))
@@ -91,7 +96,7 @@ def create_app() -> Flask:
 
     app.config.from_object(get_config())
 
-    app.mongo = MongoClient(**app.config['MONGODB'])
+    print('Creating app...')
 
     @app.route('/notes/sync', methods=['POST'])
     def sync():
@@ -196,9 +201,3 @@ def create_app() -> Flask:
     __app = app
 
     return app
-
-
-app = create_app()
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
