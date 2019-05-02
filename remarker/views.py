@@ -144,7 +144,8 @@ def create_note(auth_token, note_store, note_title, note_body, note_tags, parent
     body += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
     body += "<en-note>%s</en-note>" % note_body
 
-    print(body)
+    logger.info(f"title: {note_title}")
+    logger.info(f"body: {body}")
 
     # Create note object
     note = Note()
