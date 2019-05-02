@@ -1,6 +1,7 @@
 import datetime
 import html
 import json
+import sys
 import uuid
 
 import logbook
@@ -16,6 +17,9 @@ from remarker.config import get_config
 
 COL_REQUEST_TOKENS = 'evernote_request_tokens'
 COL_ACCESS_TOKENS = 'evernote_access_tokens'
+
+LOG_FORMAT_STRING = '[{record.time:%Y-%m-%d %H:%M:%S}] [{record.module}] ' \
+                    '[{record.level_name}]: {record.message}'
 
 logger = logbook.Logger(__name__)
 sentry = Sentry()
@@ -38,6 +42,7 @@ try:
     @uwsgidecorators.postfork
     def init_db():
         __app.mongo = MongoClient(**__app.config['MONGODB'])
+        print('Added mongo to Flask object.')
 except ModuleNotFoundError:
     pass
 
@@ -95,6 +100,18 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     app.config.from_object(get_config())
+
+    if app.config['CONFIG_NAME'] in app.config['DEBUG_LOG_AVAILABLE_IN']:
+        stdout_handler = logbook.StreamHandler(stream=sys.stdout, bubble=True, filter=lambda r, h: r.level < 13)
+    else:
+        # ignore debug when not in debug
+        stdout_handler = logbook.StreamHandler(stream=sys.stdout, bubble=True, filter=lambda r, h: 10 < r.level < 13)
+    stdout_handler.format_string = LOG_FORMAT_STRING
+    logger.handlers.append(stdout_handler)
+
+    stderr_handler = logbook.StreamHandler(stream=sys.stderr, bubble=True, level='WARNING')
+    stderr_handler.format_string = LOG_FORMAT_STRING
+    logger.handlers.append(stderr_handler)
 
     print('Creating app...')
 
