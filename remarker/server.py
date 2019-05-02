@@ -7,7 +7,7 @@ import logbook
 from evernote.api.client import EvernoteClient
 from evernote.edam.error.ttypes import EDAMNotFoundException, EDAMUserException
 from evernote.edam.type.ttypes import Note
-from flask import Flask, current_app, request, session, url_for
+from flask import Flask, redirect, request, session, url_for
 from pymongo import MongoClient
 from raven.contrib.flask import Sentry
 from raven.handlers.logbook import SentryHandler
@@ -135,12 +135,12 @@ def create_app() -> Flask:
             # Something was wrong with the note data
             # See EDAMErrorCode enumeration for error code explanation
             # http://dev.yinxiang.com/documentation/reference/Errors.html#Enum_EDAMErrorCode
-            print(edue)
+            logger.error(edue)
             err_string = str(edue).replace('"', '\\"')
             return f'<script> window.parent.postMessage({{ status: "500", content: "{err_string}" }},"*"); </script>'
         except EDAMNotFoundException as ednfe:
             # Parent Notebook GUID doesn't correspond to an actual notebook
-            print(ednfe)
+            logger.error(ednfe)
             err_string = str(ednfe).replace('"', '\\"')
             return f'<script> window.parent.postMessage({{ status: "500", content: "{err_string}" }},"*"); </script>'
         else:
@@ -180,15 +180,11 @@ def create_app() -> Flask:
                                                                       'sandbox_lnb' : sandbox_lnb}},
                                                             upsert=True)
 
-            return 'Evernote 授权成功，你可以关闭此页面，然后重新点击保存按钮。'
+            return 'Evernote 授权成功，您可以关闭此页面并再次点击保存按钮。'
 
     @app.route('/')
     def main_page():
-        return 'Redirect to Github'  # todo redirect to Github
-
-    @app.route('/test')
-    def test():
-        return 'This is a test page.'
+        return redirect("https://github.com/fr0der1c/Remarker", code=302)
 
     @app.route('/clear_cookie')
     def clear_cookie():
