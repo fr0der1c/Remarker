@@ -14,6 +14,7 @@ lxml = "*"
 raven = "*"
 logbook = "*"
 blinker = "*"
+uwsgidecorators = "*"
 
 [requires]
 python_version = "3.7"
