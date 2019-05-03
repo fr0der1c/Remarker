@@ -144,12 +144,12 @@ def create_note(auth_token, note_store, note_title, note_body, note_tags, parent
     body += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
     body += "<en-note>%s</en-note>" % note_body
 
-    logger.info(f"title: {note_title}")
+    logger.info(f"title: {note_title.strip()}")
     logger.info(f"body: {body}")
 
     # Create note object
     note = Note()
-    note.title = note_title
+    note.title = note_title.strip()  # strip spaces, see http://dev.evernote.com/doc/reference/Types.html#Struct_Note
     note.content = body
     note.tagNames = note_tags
 
