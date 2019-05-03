@@ -35,8 +35,6 @@ def sync():
     enml_parse_result = ENMLParser(note_html_content).parse().decode('utf-8')
 
     note_title = request.form.get('note[title]')
-    if not note_title:
-        note_title = "无标题文档"
 
     note_url = request.form.get('note[url]')
     note_tags = json.loads(request.form.get('note[tags]'))
@@ -144,12 +142,21 @@ def create_note(auth_token, note_store, note_title, note_body, note_tags, parent
     body += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
     body += "<en-note>%s</en-note>" % note_body
 
-    logger.info(f"title: {note_title.strip()}")
+    # strip spaces, see http://dev.evernote.com/doc/reference/Types.html#Struct_Note
+    note_title = note_title.strip()
+
+    # https://dev.evernote.com/doc/reference/javadoc/constant-values.html#com.evernote.edam.limits.Constants.EDAM_APPLICATIONDATA_VALUE_LEN_MIN
+    if len(note_title) > 255:
+        note_title = note_title[:255]
+    elif not note_title:
+        note_title = "无标题文档"
+
+    logger.info(f"title: {note_title}")
     logger.info(f"body: {body}")
 
     # Create note object
     note = Note()
-    note.title = note_title.strip()  # strip spaces, see http://dev.evernote.com/doc/reference/Types.html#Struct_Note
+    note.title = note_title
     note.content = body
     note.tagNames = note_tags
 
