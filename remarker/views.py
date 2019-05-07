@@ -83,7 +83,7 @@ def evernote_callback():
         client = EvernoteClient(
                 consumer_key=current_app.config['EVERNOTE_CONSUMER_KEY'],
                 consumer_secret=current_app.config['EVERNOTE_CONSUMER_SECRET'],
-                sandbox=True
+                sandbox=current_app.config['EVERNOTE_SANDBOX']
         )
         access_token = client.get_access_token(
                 oauth_token,

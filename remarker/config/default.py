@@ -4,6 +4,7 @@ class Config:
 
     EVERNOTE_CONSUMER_KEY = 'test'
     EVERNOTE_CONSUMER_SECRET = 'some-secret'
+    EVERNOTE_SANDBOX = False
 
     MONGODB = {
         'host'              : '127.0.0.1',
